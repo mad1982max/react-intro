@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import TodoList from "./TODO/todoList";
+import Loader from "./Loader";
 import AddTodo from "./TODO/AddTodo";
 import context from "./context";
 
 function App() {
-  const [todos, setTodos] = useState([
-    { id: 2561, compleate: false, title: "text1" },
-    { id: 892, compleate: true, title: "text2" },
-    { id: 783, compleate: false, title: "text3" },
-  ]);
+  const [todos, setTodos] = useState([]);
+  const [isLoad, setLoadingState] = useState(false);
 
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/todos/?_limit=10")
       .then((response) => response.json())
-      .then((json) => setTodos([...todos, ...json]));
+      .then((todos) =>
+        setTimeout(() => {
+          setLoadingState(true);
+          setTodos(todos);
+        }, 3000)
+      );
   }, []);
 
   function onChange(data) {
@@ -47,10 +50,12 @@ function App() {
     <context.Provider value={{ removeTodo }}>
       <div className="wrapper">
         <h1 className="center">TUTORIAL</h1>
+
         <AddTodo onCreate={addTodo} />
+        {!isLoad && <Loader />}
         {todos.length ? (
           <TodoList todos={todos} onToggle={onChange} />
-        ) : (
+        ) : !isLoad ? null : (
           <p className="center">EMPTY LIST</p>
         )}
       </div>
