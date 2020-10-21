@@ -12,11 +12,14 @@ code {
     monospace;
 }
 
+.center {
+  text-align: center;
+}
+
 .wrapper {
   padding-top: 5rem;
   margin: 0 auto;
   width: 600px;
-  background: rgb(92, 122, 156);
 }
 
 .rm {
